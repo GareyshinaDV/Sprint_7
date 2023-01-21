@@ -1,4 +1,4 @@
-package resourses;
+package data;
 
 public class Login {
 

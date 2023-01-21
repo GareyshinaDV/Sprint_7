@@ -5,13 +5,13 @@ import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import resourses.Courier;
-import resourses.Login;
+import data.Courier;
+import data.Login;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
-public class courierCreation {
+public class CourierCreationTest {
 
     @Before
     public void setUp() {
@@ -61,7 +61,7 @@ public class courierCreation {
     }
 
     @Test
-    @DisplayName("Проверка обязательности поля логин")
+    @DisplayName("Проверка обязательности заполнения поля логин")
     @Description("Тест проверяет, что невозможно курьера без логина")
     public void checkLoginRequiredTest(){
         Courier courier = new Courier(null, "123456", "Агата");
@@ -78,7 +78,7 @@ public class courierCreation {
     }
 
     @Test
-    @DisplayName("Проверка обязательности поля пароль")
+    @DisplayName("Проверка обязательности заполнения поля пароль")
     @Description("Тест проверяет, что невозможно курьера без пароля")
     public void checkPasswordRequiredTest(){
         Courier courier = new Courier("agatha", null, "Агата");
