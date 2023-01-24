@@ -7,26 +7,18 @@ import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.apache.http.HttpStatus.*;
 
-public class ListOfOrdersReturnTest {
-
-    @Before
-    public void setUp() {
-        RestAssured.baseURI= "https://qa-scooter.praktikum-services.ru";
-    }
+public class ListOfOrdersReturnTest extends BaseTest {
 
     @Test
     @DisplayName("Проверка возврата списка заказов")
     @Description("Тест проверяет, что возвращается список заказов в ответе на запрос списка заказов")
-    public void checkReturnsListOfOrder(){
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .when()
-                        .get("/api/v1/orders");
+    public void checkReturnsListOfOrderTest(){
+        OrderApi listOfOrders = new OrderApi();
+        Response response = listOfOrders.getListOfOrders();
         response.then().assertThat().body("orders", notNullValue())
                 .and()
-                .statusCode(200);
-
+                .statusCode(SC_OK);
     }
 }

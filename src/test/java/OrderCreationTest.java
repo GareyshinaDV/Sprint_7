@@ -9,9 +9,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import static org.apache.http.HttpStatus.*;
 
 @RunWith(Parameterized.class)
-public class OrderCreationTest {
+public class OrderCreationTest extends BaseTest {
 
     private final String firstName;
     private final String lastName;
@@ -48,11 +49,6 @@ public class OrderCreationTest {
         };
     }
 
-    @Before
-    public void setUp() {
-        RestAssured.baseURI= "http://qa-scooter.praktikum-services.ru";
-    }
-
     @Test
     @DisplayName("Проверка создания заказа с разными параметрами цветов")
     @Description("Тест проверяет, что можно создать заказ, указав один цвет, указав оба цвета и не указывая цвет")
@@ -68,15 +64,11 @@ public class OrderCreationTest {
                 "\"comment\":\"" + comment + "\"," +
                 "\"color\":" + color +
                 "}";
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .body(order)
-                        .post("/api/v1/orders");
+        OrderApi newOrder = new OrderApi();
+        Response response = newOrder.creationOrders(order);
         response
                 .then().assertThat().body("track", notNullValue())
                 .and()
-                .statusCode(201);
+                .statusCode(SC_CREATED);
     }
-
 }
