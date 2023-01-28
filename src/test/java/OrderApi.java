@@ -1,9 +1,11 @@
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
 
 public class OrderApi {
 
+    @Step("Получение списка заказов")
     public Response getListOfOrders(){
         Response response =
                 given()
@@ -12,7 +14,7 @@ public class OrderApi {
                         .get("/api/v1/orders");
         return response;
     }
-
+    @Step("Создание заказа")
     public Response creationOrders(String order){
         Response response =
                 given()

@@ -11,6 +11,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 
 public class CourierCreationTest extends BaseTest
 {
+protected int courierId;
 
     @Test
     @DisplayName("Проверка создания нового курьера")
@@ -22,6 +23,7 @@ public class CourierCreationTest extends BaseTest
                  response.then().assertThat().body("ok", equalTo(true))
                          .and()
                          .statusCode(SC_CREATED);
+        courierId = courier.authorizationOfCourier(courier).as(Login.class).getId();
     }
 
     @Test
@@ -34,6 +36,7 @@ public class CourierCreationTest extends BaseTest
                         response.then().assertThat().body("message", equalTo("Этот логин уже используется. Попробуйте другой."))
                                 .and()
                                 .statusCode(SC_CONFLICT);
+        courierId = courier.authorizationOfCourier(courier).as(Login.class).getId();
     }
 
     @Test
@@ -62,7 +65,7 @@ public class CourierCreationTest extends BaseTest
     @DisplayName("Проверка обязательности наличия поля логин")
     @Description("Тест проверяет, что поле логин обязательно")
     public void checkCreationCourierWithoutFieldLoginImpossibilityTest(){
-            CourierApi courier = new CourierApi("123456", "Агата");
+        CourierApi courier = new CourierApi("123456", "Агата");
             Response response = courier.creationCourier(courier);
             response.then().assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"))
                 .and()
@@ -91,6 +94,12 @@ public class CourierCreationTest extends BaseTest
         response.then().assertThat().body("message", equalTo("Этот логин уже используется. Попробуйте другой."))
                 .and()
                 .statusCode(SC_CONFLICT);
+        courierId = courier.authorizationOfCourier(courier).as(Login.class).getId();
+    }
+
+    @After
+    public void deleteCourierAfterTest() {
+        CourierApi.deletionOfCourier(courierId);
     }
 
 }

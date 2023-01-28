@@ -1,83 +1,49 @@
-import data.Login;
+import data.Courier;
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
 
-public class CourierApi {
+public class CourierApi extends Courier {
 
-    private String login;
-    private String password;
-    private String firstName;
-
-    private final static String COURIER_ENDPOINT = "/api/v1/courier/";
+    private static String COURIER_ENDPOINT = "/api/v1/courier/";
 
     public CourierApi(String login, String password, String firstName) {
-        this.login = login;
-        this.password = password;
-        this.firstName = firstName;
+        super(login, password, firstName);
     }
 
     public CourierApi(String password, String firstName) {
-        this.password = password;
-        this.firstName = firstName;
+        super(password, firstName);
     }
 
     public CourierApi(String login) {
-        this.login = login;
-    }
-
-    public CourierApi() {
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        super(login);
     }
 
 
+    @Step("Создание учетной записи курьера")
     public Response creationCourier(CourierApi courier){
-        Response response = given()
+        Response response = given().log().all()
                 .header("Content-type", "application/json")
-//                .and()
                 .body(courier)
                 .when()
                 .post(COURIER_ENDPOINT);
         return response;
     }
 
+    @Step("Авторизация курьера")
     public Response authorizationOfCourier(CourierApi courier){
-        Response response = given()
+        Response response = given().log().all()
                 .header("Content-type", "application/json")
                 .body(courier)
                 .when()
                 .post(COURIER_ENDPOINT + "login");
         return response;
     }
-
-    public void deletionOfCourier(CourierApi courier){
-        Login login = courier.authorizationOfCourier(courier).as(Login.class);
-        given()
-                .delete(COURIER_ENDPOINT+login.getId());
+    @Step("Удаление учетной записи курьера")
+    public static void deletionOfCourier(int courierId){
+        given().log().all()
+                .delete(COURIER_ENDPOINT+courierId);
     }
-
 
 }

@@ -12,7 +12,7 @@ public class AuthorizationTest extends BaseTest{
 
     @Before
     public void newCourierForAuthorizationClass() {
-        CourierApi courier = new CourierApi("agatha", "123456", "Агата");
+        CourierApi courier = new CourierApi("agathadaer", "123456", "Агата");
         courier.creationCourier(courier);
     }
 
@@ -20,7 +20,7 @@ public class AuthorizationTest extends BaseTest{
     @DisplayName("Проверка возможности авторизации курьера")
     @Description("Тест проверяет что курьер может авторизоваться при передаче обязательных полей и значений логина и пароля")
     public void checkPositiveAuthorizationTest(){
-        CourierApi courier = new CourierApi("agatha", "123456", "Агата");
+        CourierApi courier = new CourierApi("agathadaer", "123456", "Агата");
         Response response = courier.authorizationOfCourier(courier);
         response.then().assertThat().body("id", notNullValue())
                 .and()
@@ -43,7 +43,7 @@ public class AuthorizationTest extends BaseTest{
     @DisplayName("Проверка возврата ошибки в случае ввода несуществующей пары логин-пароль")
     @Description("Тест проверяет, что будет возвращена ошибка при вводе несуществующей пары логин-пароль")
     public void checkIncorrectnessPairLoginPasswordTest(){
-        CourierApi courier = new CourierApi("agatha", "1234567", "Агата");
+        CourierApi courier = new CourierApi("agathadaer", "1234567", "Агата");
         Response response = courier.authorizationOfCourier(courier);
         response.then().assertThat().body("message", equalTo("Учетная запись не найдена"))
                 .and()
